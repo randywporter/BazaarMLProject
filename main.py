@@ -9,7 +9,7 @@ interface, probably a web interface.
 import requests
 import json
 
-TEMP_API_KEY = "987e1ef7-c4f1-4452-b764-215167242fd5"
+TEMP_API_KEY = str(input("Please enter your API key: "))
 API_URL = "https://api.hypixel.net/v2/skyblock/bazaar"
 
 
