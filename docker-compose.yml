@@ -1,0 +1,41 @@
+services:
+  db:
+    image: timescale/timescaledb-ha:pg18
+    container_name: market-db
+
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: marketdata
+      POSTGRES_USER: marketuser
+      POSTGRES_PASSWORD: supersecretpassword
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U marketuser -d marketdata"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  collector:
+    build: ./collector
+
+    restart: unless-stopped
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    environment:
+      DATABASE_URL: postgresql://marketuser:supersecretpassword@db:5432/marketdata
+
+    command: python collector.py
+
+volumes:
+  db_data:
