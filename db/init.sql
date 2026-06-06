@@ -12,6 +12,8 @@ CREATE TABLE IF NOT EXISTS market_snapshots (
 
     exact_delta_price NUMERIC,
 
+    percent_margin_price NUMERIC,
+
     buy_price NUMERIC,
     sell_price NUMERIC,
     delta_price NUMERIC,

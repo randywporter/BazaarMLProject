@@ -46,6 +46,11 @@ def insert_snapshot(conn, product):
 
     quick_status = product.get('quick_status', {})
 
+    if quick_status["sellPrice"] and quick_status["buyPrice"]:
+        percent_margin = 100 * (quick_status["buyPrice"] - quick_status["sellPrice"]) / quick_status["sellPrice"]
+    else:
+        percent_margin = None
+
     cursor.execute(
         """
         INSERT INTO market_snapshots(
@@ -55,6 +60,7 @@ def insert_snapshot(conn, product):
             buy_summary,
             sell_summary,
             exact_delta_price,
+            percent_margin_price,
             buy_price,
             sell_price,
             delta_price,
@@ -82,6 +88,7 @@ def insert_snapshot(conn, product):
             %s,
             %s,
             %s,
+            %s,
             %s
         )
         """,
@@ -91,6 +98,7 @@ def insert_snapshot(conn, product):
             psycopg.types.json.Jsonb(buy_summary),
             psycopg.types.json.Jsonb(sell_summary),
             exact_delta_price,
+            percent_margin,
             quick_status["buyPrice"],
             quick_status["sellPrice"],
             (quick_status["buyPrice"] - quick_status["sellPrice"]),
