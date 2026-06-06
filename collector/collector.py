@@ -14,7 +14,7 @@ import traceback
 
 DATABASE_URL = os.environ["DATABASE_URL"]
 
-POLL_INTERVAL = 60
+POLL_INTERVAL = 900
 
 API_URL = "https://api.hypixel.net/v2/skyblock/bazaar"
 
@@ -112,7 +112,7 @@ def insert_snapshot(conn, product):
         ))
 
 def collect():
-    print("collecting data...")
+    print(f"collecting data... at {time.gmtime()}")
 
     conn = get_db_connection()
 
